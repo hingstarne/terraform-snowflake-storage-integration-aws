@@ -29,31 +29,6 @@ resource "aws_iam_role" "s3_reader" {
 
 data "aws_iam_policy_document" "s3_reader_policy_doc" {
   # Write logs to cloudwatch
-  statement {
-    sid       = "S3ReadWritePerms"
-    effect    = "Allow"
-    resources = ["${aws_s3_bucket.geff_bucket.arn}/*"]
-
-    actions = [
-      "s3:PutObject",
-      "s3:GetObject",
-      "s3:GetObjectVersion",
-    ]
-  }
-
-  statement {
-    sid       = "S3ListPerms"
-    effect    = "Allow"
-    resources = [aws_s3_bucket.geff_bucket.arn]
-
-    actions = ["s3:ListBucket"]
-
-    condition {
-      test     = "StringLike"
-      variable = "s3:prefix"
-      values   = ["*"]
-    }
-  }
 
   dynamic "statement" {
     for_each = var.data_bucket_arns
